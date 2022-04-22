@@ -31,7 +31,7 @@ function collect_server_names(ns) {
 }
 
 export async function main(ns) {
-	if (ns.args.length != 1 || args[0] != "all") {
+	if (ns.args.length != 1 || ns.args[0] != "all") {
 		ns.tprint("Usage: run stopHack.js all");
 		return;
 	}

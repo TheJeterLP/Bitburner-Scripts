@@ -32,7 +32,7 @@ function collect_server_names(ns) {
 }
 
 export async function main(ns) {
-	if (args.length != 1) {
+	if (ns.args.length != 1) {
 		ns.tprint("Usage: run infect.js [targetServer]");
 		return;
 	}

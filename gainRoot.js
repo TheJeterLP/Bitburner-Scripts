@@ -57,6 +57,7 @@ export async function main(ns) {
 	if (ns.getServerNumPortsRequired(target) <= 5) {
 		//Try to gain root access
 		ns.nuke(target);
+		ns.trpint("Root access available!")
 	} else {
 		//Send error message
 		ns.tprint("Not enough ports opened.");

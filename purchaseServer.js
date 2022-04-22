@@ -1,6 +1,6 @@
 /** @param {NS} ns */
 export async function main(ns) {
-	if (args.length != 1) {
+	if (ns.args.length != 1) {
 		ns.tprint("Usage: run purchaseServer.js [RAM]");
 		return;
 	}
@@ -20,11 +20,11 @@ export async function main(ns) {
 	//Array of all bought servers the user owns.
 	const servers = ns.getPurchasedServers();
 
+	var bought = false;
+
 	//Iterate through every bought server.
 	for (let i = 0; i < ns.getPurchasedServers().length; ++i) {
 		var server = ns.getPurchasedServers()[i];
-
-		ns.tprint("checking " + server + " has ram: " + ns.getServerMaxRam(server));
 
 		//Check if the server has less ram than we want to buy
 		if (ns.getServerMaxRam(server) >= ram) {
@@ -43,8 +43,13 @@ export async function main(ns) {
 			ns.tprint("Server deleted!");
 			var hostname = ns.purchaseServer("pserv-" + ram + "-" + i, ram);
 			ns.tprint("Bought a new server! Name: " + hostname);
+			bought = true;
 		} else {
 			ns.tprint("Failed to delete Server!");
 		}
+	}
+
+	if (!bought) {
+		ns.tprint("All servers are up to date. Nothing was changed.");
 	}
 }
