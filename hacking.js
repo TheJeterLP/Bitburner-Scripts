@@ -21,6 +21,8 @@ export async function main(ns) {
 	ns.disableLog("getServerMinSecurityLevel");
 	ns.disableLog("getServerSecurityLevel");
 	ns.disableLog("getServerMoneyAvailable");
+	ns.disableLog("grow");
+	ns.disableLog("weaken");
 
 	ns.print("Starting hack on " + target);
 
@@ -37,12 +39,14 @@ export async function main(ns) {
 		var sec = ns.getServerSecurityLevel(target);
 		var mon = ns.getServerMoneyAvailable(target);
 
-		if (sec > securityTresh) {
-			ns.print("Security level is too high. Value: " + sec + " Target: " + securityTresh + " Using Weaken now.");
-			await ns.weaken(target);
-		} else if (mon < moneyTresh) {
+		if (mon < moneyTresh) {
 			ns.print("Available money on the Server is too low. Value: " + mon + " Target: " + moneyTresh + " Using Grow now.");
 			await ns.grow(target);
+			ns.print("Money level after growing: " + ns.getServerMoneyAvailable(target));
+		} else if (sec > securityTresh) {
+			ns.print("Security level is too high. Value: " + sec + " Target: " + securityTresh + " Using Weaken now.");
+			await ns.weaken(target);
+			ns.print("Security level after weaken: " + ns.getServerSecurityLevel(target));
 		} else {
 			ns.print("HACKING!");
 			await ns.hack(target);
