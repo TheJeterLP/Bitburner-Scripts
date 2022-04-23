@@ -22,7 +22,7 @@ export async function main(ns) {
 
 	var bought = false;
 
-	//Iterate through every bought server.
+	//Iterate through every bought server and try to replace it.
 	for (let i = 0; i < ns.getPurchasedServers().length; ++i) {
 		var server = ns.getPurchasedServers()[i];
 
@@ -31,24 +31,31 @@ export async function main(ns) {
 			continue;
 		}
 
-		ns.tprint("Deleting server and buying a new one.");
+		if (ns.getServerMoneyAvailable("home") >= ns.getPurchasedServerCost(ram)) {
+			ns.tprint("Deleting server and buying a new one.");
+			//Kill the targetScript if it is still running.
+			if (ns.scriptRunning(targetScript, server)) {
+				ns.scriptKill(targetScript, server);
+			}
 
-		//Kill the targetScript if it is still running.
-		if (ns.scriptRunning(targetScript, server)) {
-			ns.scriptKill(targetScript, server);
-		}
+			//try to delete old weak server
 
-		//try to delete old weak server
-		if (ns.deleteServer(server)) {
-			ns.tprint("Server deleted!");
-		} else {
-			ns.tprint("Failed to delete Server!");
+			if (ns.deleteServer(server)) {
+				ns.tprint("Server deleted!");
+
+				var hostname = ns.purchaseServer("pserv-" + ram, ram);
+				ns.tprint("Bought a new server! Name: " + hostname);
+				bought = true;
+
+			} else {
+				ns.tprint("Failed to delete Server!");
+			}
 		}
 	}
 
-	while (ns.getPurchasedServerLimit() > ns.getPurchasedServers().length) {		
+	while (ns.getPurchasedServerLimit() > ns.getPurchasedServers().length) {
 		if (ns.getServerMoneyAvailable("home") < ns.getPurchasedServerCost(ram)) {
-			ns.tprint("Not enough money to buy a bigger server.");
+			ns.tprint("Not enough money to buy a server.");
 			break;
 		}
 

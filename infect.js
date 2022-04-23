@@ -42,6 +42,7 @@ export async function main(ns) {
 	//Arg for the Script
 	var scriptArg = ns.args[0];
 
+	let runningOn = 0;
 
 	let [servers, serverCons] = collect_server_names(ns);
 	// Sort them by `hackAnalyzeChance`
@@ -64,6 +65,7 @@ export async function main(ns) {
 		//Check if targetScript already exists on the Server, if its running do nothing. If not replace it.
 		if (ns.fileExists(targetScript, target)) {
 			if (ns.scriptRunning(targetScript, target)) {
+				++runningOn;
 				continue;
 			}
 			//Delete targetScript to replace it
@@ -79,7 +81,6 @@ export async function main(ns) {
 		let threads = freeRam / usedRam;
 
 		if (threads < 1) {
-			ns.tprint("Script cannot run on " + target + ", theres not enough RAM!");
 			continue;
 		}
 
@@ -88,9 +89,11 @@ export async function main(ns) {
 
 		//Check if Script was started successfully
 		if (pid > 0) {
+			++runningOn;
 			ns.tprint("Target " + target + " infected! Continuing...");
 		} else {
 			ns.tprint("No PID returned, script is NOT running!");
 		}
 	}
+	ns.tprint("Script finished. Hack is running on " + runningOn + " Servers.");
 }

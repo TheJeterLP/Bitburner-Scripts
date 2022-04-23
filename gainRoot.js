@@ -23,11 +23,6 @@ export async function main(ns) {
 		return;
 	}
 
-
-
-	//sending message
-	ns.tprint("Trying to gain root on " + target);
-
 	let portsOpened = 0;
 
 	//try BruteSSH.exe if it exists
@@ -65,9 +60,5 @@ export async function main(ns) {
 		//Try to gain root access
 		ns.nuke(target);
 		ns.tprint(target + " Rooted!")
-	} else {
-		//Send error message
-		ns.tprint("Not enough ports opened.");
-	}
-
+	} 
 }
