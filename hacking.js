@@ -31,22 +31,23 @@ export async function main(ns) {
 		ns.exec("gainRoot.js", "home", 1, target);
 	}
 
-	var moneyTresh = ns.getServerMaxMoney(target) * 0.75;
-	var securityTresh = ns.getServerMinSecurityLevel(target) + 5;
+	let moneyTresh = Math.floor(ns.getServerMaxMoney(target) * 0.75);
+	let securityTresh = Math.floor (ns.getServerMinSecurityLevel(target) + 5);
+
 
 	//infinite loop
 	while (true) {
-		var sec = ns.getServerSecurityLevel(target);
-		var mon = ns.getServerMoneyAvailable(target);
+		let sec = Math.floor(ns.getServerSecurityLevel(target));
+		let mon = Math.floor(ns.getServerMoneyAvailable(target));
 
 		if (mon < moneyTresh) {
 			ns.print("Available money on the Server is too low. Value: " + mon + " Target: " + moneyTresh + " Using Grow now.");
 			await ns.grow(target);
-			ns.print("Money level after growing: " + ns.getServerMoneyAvailable(target));
+			ns.print("Money level after growing: " + Math.floor(ns.getServerMoneyAvailable(target)));
 		} else if (sec > securityTresh) {
 			ns.print("Security level is too high. Value: " + sec + " Target: " + securityTresh + " Using Weaken now.");
 			await ns.weaken(target);
-			ns.print("Security level after weaken: " + ns.getServerSecurityLevel(target));
+			ns.print("Security level after weaken: " + Math.floor(ns.getServerSecurityLevel(target)));
 		} else {
 			ns.print("HACKING!");
 			await ns.hack(target);

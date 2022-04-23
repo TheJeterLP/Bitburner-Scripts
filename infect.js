@@ -85,7 +85,7 @@ export async function main(ns) {
 		//calculate how many threads can be used on the targetServer
 		var usedRam = ns.getScriptRam(targetScript, target);
 		let freeRam = ns.getServerMaxRam(target) - ns.getServerUsedRam(target);
-		let threads = freeRam / usedRam;
+		let threads = Math.floor(freeRam / usedRam);
 
 		if (threads < 1) {
 			continue;
@@ -97,7 +97,7 @@ export async function main(ns) {
 		//Check if Script was started successfully
 		if (pid > 0) {
 			++runningOn;
-			ns.tprint("Target " + target + " infected! Continuing...");
+			ns.tprint("Script running on " + target + " with " + threads + " Threads!");
 		} else {
 			ns.tprint("No PID returned, script is NOT running!");
 		}
