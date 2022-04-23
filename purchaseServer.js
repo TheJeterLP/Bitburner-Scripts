@@ -38,15 +38,23 @@ export async function main(ns) {
 			ns.scriptKill(targetScript, server);
 		}
 
-		//try to delete old weak server and buy a new one
+		//try to delete old weak server
 		if (ns.deleteServer(server)) {
 			ns.tprint("Server deleted!");
-			var hostname = ns.purchaseServer("pserv-" + ram + "-" + i, ram);
-			ns.tprint("Bought a new server! Name: " + hostname);
-			bought = true;
 		} else {
 			ns.tprint("Failed to delete Server!");
 		}
+	}
+
+	while (ns.getPurchasedServerLimit() > ns.getPurchasedServers().length) {		
+		if (ns.getServerMoneyAvailable("home") < ns.getPurchasedServerCost(ram)) {
+			ns.tprint("Not enough money to buy a bigger server.");
+			break;
+		}
+
+		var hostname = ns.purchaseServer("pserv-" + ram, ram);
+		ns.tprint("Bought a new server! Name: " + hostname);
+		bought = true;
 	}
 
 	if (!bought) {

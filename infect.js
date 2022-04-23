@@ -53,20 +53,17 @@ export async function main(ns) {
 
 		//Check if target is rooted
 		if (!ns.hasRootAccess(target)) {
-			ns.tprint("Attempting to gain root access on " + target);
 			ns.exec("gainRoot.js", "home", 1, target);
 		}
 
-		//check if target is rooted again
+		//check if gaining root worked. If not, continue.
 		if (!ns.hasRootAccess(target)) {
-			ns.tprint("Attempting to gain root failed!");
 			continue;
 		}
 
 		//Check if targetScript already exists on the Server, if its running do nothing. If not replace it.
 		if (ns.fileExists(targetScript, target)) {
 			if (ns.scriptRunning(targetScript, target)) {
-				ns.tprint("Script already running. Use stopHack.js to stop all scripts first.");
 				continue;
 			}
 			//Delete targetScript to replace it
@@ -82,7 +79,7 @@ export async function main(ns) {
 		let threads = freeRam / usedRam;
 
 		if (threads < 1) {
-			ns.tprint("Script cannot run, theres not enough RAM!");
+			ns.tprint("Script cannot run on " + target + ", theres not enough RAM!");
 			continue;
 		}
 

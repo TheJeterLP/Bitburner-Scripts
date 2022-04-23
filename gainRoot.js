@@ -26,38 +26,45 @@ export async function main(ns) {
 
 
 	//sending message
-	ns.tprint("Trying to gain root...");
+	ns.tprint("Trying to gain root on " + target);
+
+	let portsOpened = 0;
 
 	//try BruteSSH.exe if it exists
 	if (ns.fileExists("BruteSSH.exe", "home")) {
 		ns.brutessh(target);
+		++portsOpened;
 	}
 
 	//try FTPCrack.exe if it exists
 	if (ns.fileExists("FTPCrack.exe", "home")) {
 		ns.ftpcrack(target);
+		++portsOpened;
 	}
 
 	//try relaySMTP.exe if it exists
 	if (ns.fileExists("relaySMTP.exe", "home")) {
 		ns.relaysmtp(target);
+		++portsOpened;
 	}
 
 	//try HTTPWorm.exe if it exists
 	if (ns.fileExists("HTTPWorm.exe", "home")) {
 		ns.httpworm(target);
+		++portsOpened;
 	}
 
 	//try SQLInject.exe if it exists
 	if (ns.fileExists("SQLInject.exe", "home")) {
 		ns.sqlinject(target);
+		++portsOpened;
 	}
 
-	//Check if the Server actually is hackable and only needs 5 or less open Ports.
-	if (ns.getServerNumPortsRequired(target) <= 5) {
+	//Check if the Server actually is hackable and all ports are open.
+	if (ns.getServerNumPortsRequired(target) <= portsOpened) {
 		//Try to gain root access
 		ns.nuke(target);
-		ns.trpint("Root access available!")
+		ns.tprint(target + " Rooted!")
 	} else {
 		//Send error message
 		ns.tprint("Not enough ports opened.");
