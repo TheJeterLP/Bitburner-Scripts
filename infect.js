@@ -39,8 +39,14 @@ export async function main(ns) {
 
 	//Script to copy and start on Servers.
 	var targetScript = "hacking.js";
-	//Arg for the Script
+	//Arg for the Script - has to be a server
 	var scriptArg = ns.args[0];
+
+	//Check if target Server actually exists
+	if (!ns.serverExists(scriptArg)) {
+		ns.tprint(scriptArg + " is not a Server!");
+		return;
+	}
 
 	let runningOn = 0;
 
@@ -74,6 +80,7 @@ export async function main(ns) {
 
 		//Upload targetScript to targetServer
 		await ns.scp(targetScript, "home", target);
+		ns.tprint("Replaced Script file on " + target);
 
 		//calculate how many threads can be used on the targetServer
 		var usedRam = ns.getScriptRam(targetScript, target);

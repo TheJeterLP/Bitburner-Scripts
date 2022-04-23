@@ -16,6 +16,14 @@ export async function main(ns) {
 		return;
 	}
 
+	ns.disableLog("disableLog");
+	ns.disableLog("getServerMaxMoney");
+	ns.disableLog("getServerMinSecurityLevel");
+	ns.disableLog("getServerSecurityLevel");
+	ns.disableLog("getServerMoneyAvailable");
+
+	ns.print("Starting hack on " + target);
+
 	//check if server has root access, if not try to gain it using gainRoot.js
 	if (!ns.hasRootAccess(target)) {
 		ns.exec("gainRoot.js", "home", 1, target);
@@ -26,11 +34,17 @@ export async function main(ns) {
 
 	//infinite loop
 	while (true) {
-		if (ns.getServerSecurityLevel(target) > securityTresh) {
+		var sec = ns.getServerSecurityLevel(target);
+		var mon = ns.getServerMoneyAvailable(target);
+
+		if (sec > securityTresh) {
+			ns.print("Security level is too high. Value: " + sec + " Target: " + securityTresh + " Using Weaken now.");
 			await ns.weaken(target);
-		} else if (ns.getServerMoneyAvailable(target) < moneyTresh) {
+		} else if (mon < moneyTresh) {
+			ns.print("Available money on the Server is too low. Value: " + mon + " Target: " + moneyTresh + " Using Grow now.");
 			await ns.grow(target);
 		} else {
+			ns.print("HACKING!");
 			await ns.hack(target);
 		}
 	}
